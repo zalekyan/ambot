@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Facebook Clone Full Features</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background-color: #f0f2f5;
+      transition: background-color 0.3s ease;
+    }
+
+    .page {
+      display: none;
+      height: 100vh;
+      width: 100%;
+    }
+
+    #loginPage {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .login-box {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+      width: 300px;
+    }
+
+    .login-box h2 {
+      color: #1877f2;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .login-box input, .login-box button {
+      width: 100%;
+      margin: 10px 0;
+      padding: 12px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    .login-box button {
+      background-color: #1877f2;
+      border: none;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    #mainApp {
+      display: flex;
+    }
+
+    .sidebar {
+      width: 200px;
+      background: #fff;
+      padding: 20px;
+      border-right: 1px solid #ccc;
+      height: 100vh;
+    }
+
+    .sidebar button {
+      display: block;
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 10px;
+      border: none;
+      background: none;
+      text-align: left;
+      font-weight: bold;
+      cursor: pointer;
+      color: #333;
+    }
+
+    .content {
+      flex: 1;
+      padding: 20px;
+    }
+
+    .section {
+      display: none;
+    }
+
+    .section.active {
+      display: block;
+      animation: fade 0.3s ease-in-out;
+    }
+
+    @keyframes fade {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .header {
+      background-color: #fff;
+      padding: 10px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .username-display {
+      font-weight: bold;
+      color: #1877f2;
+    }
+
+    /* Post Box */
+    .post-box {
+      background: #fff;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+
+    .post-box textarea {
+      width: 100%;
+      resize: none;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 10px;
+      height: 60px;
+      margin-bottom: 10px;
+    }
+
+    .post-box button {
+      background-color: #1877f2;
+      color: #fff;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .feed-post {
+      background: #fff;
+      padding: 10px 15px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+    }
+
+    .like-btn {
+      background: none;
+      border: none;
+      color: #1877f2;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .like-count {
+      margin-left: 10px;
+    }
+
+    .comment-box {
+      margin-top: 10px;
+    }
+
+    .friend-request {
+      background: #fff;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 6px;
+    }
+
+    .chat-box {
+      background: #fff;
+      padding: 10px;
+      border-radius: 6px;
+    }
+
+    .profile-card {
+      background: #fff;
+      padding: 15px;
+      border-radius: 8px;
+    }
+
+    .profile-card p {
+      margin: 5px 0;
+    }
+
+    /* Dark Mode */
+    body.dark-mode {
+      background-color: #18191a;
+      color: white;
+    }
+
+    body.dark-mode .sidebar {
+      background-color: #242526;
+    }
+
+    body.dark-mode .sidebar button {
+      color: white;
+    }
+
+    body.dark-mode .header {
+      background-color: #242526;
+    }
+
+    body.dark-mode .feed-post, body.dark-mode .friend-request, body.dark-mode .chat-box, body.dark-mode .profile-card {
+      background-color: #3a3b3c;
+    }
+
+    body.dark-mode .post-box {
+      background-color: #3a3b3c;
+    }
+
+    /* Toggle Icon */
+    .toggle-btn {
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- LOGIN PAGE -->
+  <div class="page" id="loginPage">
+    <div class="login-box">
+      <h2>Facebook</h2>
+      <input type="text" id="usernameInput" placeholder="Email or Phone" />
+      <input type="password" id="passwordInput" placeholder="Password" />
+      <button onclick="handleLogin()">Log In</button>
+    </div>
+  </div>
+
+  <!-- MAIN APP -->
+  <div class="page" id="mainApp">
+    <div class="sidebar">
+      <button onclick="switchSection('home')">🏠 Home</button>
+      <button onclick="switchSection('friends')">👥 Friends</button>
+      <button onclick="switchSection('messages')">💬 Messages</button>
+      <button onclick="switchSection('reels')">🎥 Reels</button>
+      <button onclick="switchSection('watch')">📺 Watch</button>
+      <button onclick="switchSection('profile')">🙍‍♂️ Profile</button>
+      <button onclick="toggleDarkMode()" class="toggle-btn">🌙</button>
+      <button onclick="logout()">🚪 Logout</button>
+    </div>
+    <div class="content">
+      <div class="header">
+        <div class="username-display" id="displayUsername"></div>
+      </div>
+
+      <div class="section active" id="home">
+        <div class="post-box">
+          <textarea id="postContent" placeholder="What's on your mind?"></textarea>
+          <button onclick="addPost()">Post</button>
+        </div>
+        <div id="feed"></div>
+      </div>
+
+      <div class="section" id="friends">
+        <div class="friend-request">
+          <p><strong>Alex Johnson</strong> sent you a friend request.</p>
+          <button onclick="alert('Accepted')">Accept</button>
+          <button onclick="alert('Declined')">Decline</button>
+        </div>
+        <div class="friend-request">
+          <p><strong>Linda May</strong> sent you a friend request.</p>
+          <button onclick="alert('Accepted')">Accept</button>
+          <button onclick="alert('Declined')">Decline</button>
+        </div>
+      </div>
+
+      <div class="section" id="messages">
+        <div class="chat-box">
+          <p><strong>Linda:</strong> Hey, how are you?</p>
+          <p><strong>You:</strong> I'm good! You?</p>
+        </div>
+      </div>
+
+      <div class="section" id="reels">
+        <p>🎥 Reels loading... (fake preview)</p>
+      </div>
+
+      <div class="section" id="watch">
+        <p>📺 Watch some videos here (placeholder)</p>
+      </div>
+
+      <div class="section" id="profile">
+        <div class="profile-card">
+          <h3>Your Profile</h3>
+          <p><strong>Username:</strong> <span id="profileUsername"></span></p>
+          <p><strong>Email:</strong> <span id="profileEmail"></span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const loginPage = document.getElementById("loginPage");
+    const mainApp = document.getElementById("mainApp");
+    const feed = document.getElementById("feed");
+    let darkMode = false;
+
+    // Restore session
+    window.onload = () => {
+      const savedUser = localStorage.getItem("fbUser");
+      if (savedUser) {
+        showApp(JSON.parse(savedUser));
+      } else {
+        loginPage.style.display = "flex";
+      }
+    };
+
+    function handleLogin() {
+      const username = document.getElementById("usernameInput").value.trim();
+      const password = document.getElementById("passwordInput").value;
+
+      if (username && password) {
+        const userData = { username, email: username };
+        localStorage.setItem("fbUser", JSON.stringify(userData));
+        showApp(userData);
+      } else {
+        alert("Please enter username and password.");
+      }
+    }
+
+    function showApp(user) {
+      loginPage.style.display = "none";
+      mainApp.style.display = "flex";
+      document.getElementById("displayUsername").innerText = "Welcome, " + user.username;
+      document.getElementById("profileUsername").innerText = user.username;
+      document.getElementById("profileEmail").innerText = user.email;
+    }
+
+    function switchSection(sectionId) {
+      const sections = document.querySelectorAll(".section");
+      sections.forEach(sec => sec.classList.remove("active"));
+      document.getElementById(sectionId).classList.add("active");
+    }
+
+    function logout() {
+      document.getElementById("mainApp").style.display = "none";
+      document.getElementById("loginPage").style.display = "flex";
+      localStorage.removeItem("fbUser");
+    }
+
+    function toggleDarkMode() {
+      darkMode = !darkMode;
+      document.body.classList.toggle('dark-mode', darkMode);
+    }
+
+    function addPost() {
+      const postContent = document.getElementById("postContent").value.trim();
+      if (postContent) {
+        const postElement = document.createElement("div");
+        postElement.classList.add("feed-post");
+        postElement.innerHTML = `
+          <p>${postContent}</p>
+          <button class="like-btn" onclick="likePost(this)">👍 Like</button>
+          <span class="like-count">0</span>
+          <div class="comment-box">
+            <input type="text" placeholder="Add a comment..." onkeydown="addComment(event, this)">
+          </div>
+        `;
+        feed.prepend(postElement);
+        document.getElementById("postContent").value = '';
+      } else {
+        alert("Please enter some text to post.");
+      }
+    }
+
+    function likePost(button) {
+      const likeCount = button.nextElementSibling;
+      let count = parseInt(likeCount.textContent);
+      count = button.textContent === '👍 Like' ? count + 1 : count - 1;
+      button.textContent = count > 0 ? '👎 Unlike' : '👍 Like';
+      likeCount.textContent = count;
+    }
+
+    function addComment(event, inputField) {
+      if (event.key === "Enter" && inputField.value.trim()) {
+        const comment = inputField.value.trim();
+        const commentElement = document.createElement("p");
+        commentElement.textContent = `${comment}`;
+        inputField.parentElement.appendChild(commentElement);
+        inputField.value = '';
+      }
+    }
+  </script>
+</body>
+</html>
