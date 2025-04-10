@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Facebook Mini SPA</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background-color: #f0f2f5;
+    }
+
+    /* Login Styling */
+    .page {
+      display: none;
+      height: 100vh;
+      width: 100%;
+    }
+
+    #loginPage {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #f0f2f5;
+    }
+
+    .login-box {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+      width: 300px;
+    }
+
+    .login-box h2 {
+      color: #1877f2;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .login-box input {
+      width: 100%;
+      margin: 10px 0;
+      padding: 12px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    .login-box button {
+      width: 100%;
+      padding: 12px;
+      background-color: #1877f2;
+      border: none;
+      color: white;
+      font-weight: bold;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    /* Main Interface */
+    #mainApp {
+      display: flex;
+    }
+
+    .sidebar {
+      width: 200px;
+      background: #fff;
+      padding: 20px;
+      border-right: 1px solid #ccc;
+      height: 100vh;
+    }
+
+    .sidebar button {
+      display: block;
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 10px;
+      border: none;
+      background: none;
+      text-align: left;
+      font-weight: bold;
+      cursor: pointer;
+      color: #333;
+    }
+
+    .content {
+      flex: 1;
+      padding: 20px;
+    }
+
+    .section {
+      display: none;
+    }
+
+    .section.active {
+      display: block;
+      animation: fade 0.3s ease-in-out;
+    }
+
+    @keyframes fade {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .header {
+      background-color: #fff;
+      padding: 10px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .username-display {
+      font-weight: bold;
+      color: #1877f2;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- LOGIN PAGE -->
+  <div class="page" id="loginPage">
+    <div class="login-box">
+      <h2>Facebook</h2>
+      <input type="text" id="usernameInput" placeholder="Email or Phone" required />
+      <input type="password" id="passwordInput" placeholder="Password" required />
+      <button onclick="handleLogin()">Log In</button>
+    </div>
+  </div>
+
+  <!-- MAIN APP -->
+  <div class="page" id="mainApp">
+    <div class="sidebar">
+      <button onclick="switchSection('home')">🏠 Home</button>
+      <button onclick="switchSection('friends')">👥 Friends</button>
+      <button onclick="switchSection('messages')">💬 Messages</button>
+      <button onclick="switchSection('reels')">🎥 Reels</button>
+      <button onclick="switchSection('watch')">📺 Watch</button>
+    </div>
+    <div class="content">
+      <div class="header">
+        <div class="username-display" id="displayUsername"></div>
+        <button onclick="logout()">Logout</button>
+      </div>
+
+      <div class="section active" id="home">
+        <h2>Home Feed</h2>
+        <p>Welcome to your Facebook clone news feed! 🎉</p>
+      </div>
+
+      <div class="section" id="friends">
+        <h2>Friends</h2>
+        <p>Here’s your friend list and suggestions!</p>
+      </div>
+
+      <div class="section" id="messages">
+        <h2>Messages</h2>
+        <p>Check your chats here 📬</p>
+      </div>
+
+      <div class="section" id="reels">
+        <h2>Reels</h2>
+        <p>Watch short videos like reels!</p>
+      </div>
+
+      <div class="section" id="watch">
+        <h2>Watch</h2>
+        <p>Long-form videos and lives are here.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Show login page on load
+    document.getElementById("loginPage").style.display = "flex";
+
+    function handleLogin() {
+      const username = document.getElementById("usernameInput").value.trim();
+      const password = document.getElementById("passwordInput").value;
+
+      if (username && password) {
+        // Simulate login success
+        document.getElementById("loginPage").style.display = "none";
+        document.getElementById("mainApp").style.display = "flex";
+        document.getElementById("displayUsername").innerText = "Logged in as: " + username;
+      } else {
+        alert("Please fill in both fields.");
+      }
+    }
+
+    function switchSection(sectionId) {
+      const allSections = document.querySelectorAll(".section");
+      allSections.forEach(sec => sec.classList.remove("active"));
+
+      const target = document.getElementById(sectionId);
+      if (target) target.classList.add("active");
+    }
+
+    function logout() {
+      document.getElementById("mainApp").style.display = "none";
+      document.getElementById("loginPage").style.display = "flex";
+      document.getElementById("usernameInput").value = '';
+      document.getElementById("passwordInput").value = '';
+    }
+  </script>
+</body>
+</html>
